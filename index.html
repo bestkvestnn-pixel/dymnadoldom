@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Дым над льдом</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="case-board" aria-label="Детективная доска">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Настольная детективная игра</p>
+            <h1>Дым над льдом</h1>
+          </div>
+          <button id="resetGame" type="button" class="ghost-button">Новая партия</button>
+        </header>
+
+        <section class="case-summary">
+          <div>
+            <h2 id="caseTitle"></h2>
+            <p id="caseIntro"></p>
+          </div>
+          <div class="case-clock">
+            <span>Время</span>
+            <strong id="caseTime"></strong>
+          </div>
+        </section>
+
+        <section class="workspace">
+          <aside class="panel suspects-panel">
+            <div class="panel-heading">
+              <h2>Подозреваемые</h2>
+              <span id="suspectCount"></span>
+            </div>
+            <div id="suspectList" class="suspect-list"></div>
+          </aside>
+
+          <section class="panel interrogation-panel">
+            <div id="agentProfile" class="agent-profile"></div>
+            <div id="dialogue" class="dialogue" aria-live="polite"></div>
+            <form id="questionForm" class="question-form">
+              <label for="questionInput">Вопрос детектива</label>
+              <div class="question-row">
+                <input
+                  id="questionInput"
+                  name="question"
+                  autocomplete="off"
+                  placeholder="Например: где вы были между 22:00 и 22:30?"
+                />
+                <button type="submit">Спросить</button>
+              </div>
+            </form>
+          </section>
+
+          <aside class="panel evidence-panel">
+            <div class="panel-heading">
+              <h2>Улики</h2>
+              <span id="evidenceCount"></span>
+            </div>
+            <div id="evidenceList" class="evidence-list"></div>
+            <div class="accusation">
+              <label for="accuseSelect">Обвинить</label>
+              <select id="accuseSelect"></select>
+              <button id="accuseButton" type="button">Назвать убийцу</button>
+              <p id="verdict" class="verdict"></p>
+            </div>
+          </aside>
+        </section>
+
+        <section class="panel canon-panel" aria-label="Хранитель канона">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Хранитель канона</h2>
+            </div>
+            <span id="canonStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Аудит</h3>
+              <div id="canonAudit" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Главные узлы расследования</h3>
+              <div id="canonNodes" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Связи</h3>
+              <div id="canonLinks" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Версии и ложные следы</h3>
+              <div id="canonTheories" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel writer-panel" aria-label="Сценарист расследования">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Сценарист расследования</h2>
+            </div>
+            <span id="writerStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Основа преступления</h3>
+              <div id="writerFoundation" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Главы расследования</h3>
+              <div id="writerChapters" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Цепочка раскрытия</h3>
+              <div id="writerChain" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Самопроверка</h3>
+              <div id="writerSelfCheck" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel architect-panel" aria-label="Архитектор главы">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Архитектор главы</h2>
+            </div>
+            <span id="architectStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Вопросы глав</h3>
+              <div id="architectQuestions" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Управление подозрениями</h3>
+              <div id="architectSuspicion" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Пакет материалов</h3>
+              <div id="architectMaterials" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Баланс и проверка</h3>
+              <div id="architectChecks" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel clue-panel" aria-label="Конструктор улик">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Конструктор улик</h2>
+            </div>
+            <span id="clueStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Улики по главам</h3>
+              <div id="clueByChapter" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Ложные и ключевые улики</h3>
+              <div id="clueFalseAndKey" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Карта выводов</h3>
+              <div id="clueRevealMap" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Подозреваемые и качество</h3>
+              <div id="clueQuality" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel document-panel" aria-label="Конструктор пакета документов">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Конструктор пакета документов</h2>
+            </div>
+            <span id="documentStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Пакеты глав</h3>
+              <div id="documentPackages" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Скрытые факты</h3>
+              <div id="documentHiddenFacts" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Документы и функции</h3>
+              <div id="documentTable" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Размещение и проверка</h3>
+              <div id="documentChecks" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel generator-panel" aria-label="Генератор документов">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Генератор документов</h2>
+            </div>
+            <span id="generatorStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Сгенерированные документы</h3>
+              <div id="generatedDocuments" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Текст документа</h3>
+              <div id="generatedText" class="document-preview"></div>
+            </article>
+            <article>
+              <h3>Служебные факты</h3>
+              <div id="generatedHiddenFacts" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Самопроверка</h3>
+              <div id="generatedChecks" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel realism-panel" aria-label="Редактор достоверности">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Редактор достоверности</h2>
+            </div>
+            <span id="realismStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Оценка документов</h3>
+              <div id="realismDocuments" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Сильные и слабые места</h3>
+              <div id="realismProblems" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Полный аудит глав</h3>
+              <div id="realismChapters" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Как улучшить</h3>
+              <div id="realismImprovements" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel player-tester-panel" aria-label="Игрок-тестировщик документов">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Игрок-тестировщик документов</h2>
+            </div>
+            <span id="playerTesterStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Мои заметки</h3>
+              <div id="playerTesterNotes" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Мои версии</h3>
+              <div id="playerTesterVersions" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Мои подозреваемые</h3>
+              <div id="playerTesterSuspects" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Где я застрял</h3>
+              <div id="playerTesterProblems" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Раскрываемость</h3>
+              <div id="playerTesterRevealability" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel logic-panel" aria-label="Аудитор логики расследования">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI Агент</p>
+              <h2>Аудитор логики расследования</h2>
+            </div>
+            <span id="logicStatus"></span>
+          </div>
+          <div class="canon-grid">
+            <article>
+              <h3>Цепочка доказательств</h3>
+              <div id="logicProofChain" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Подозреваемые</h3>
+              <div id="logicSuspects" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Ложные версии и время</h3>
+              <div id="logicFalseVersions" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Режим атаки</h3>
+              <div id="logicAttack" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Итоговый аудит</h3>
+              <div id="logicFinalAudit" class="canon-list"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
