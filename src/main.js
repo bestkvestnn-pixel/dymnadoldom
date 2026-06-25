@@ -29,6 +29,7 @@ const nodes = {
   accuseButton: document.querySelector("#accuseButton"),
   verdict: document.querySelector("#verdict"),
   resetGame: document.querySelector("#resetGame"),
+  viewTabs: document.querySelectorAll("[data-view-tab]"),
   canonStatus: document.querySelector("#canonStatus"),
   canonAudit: document.querySelector("#canonAudit"),
   canonNodes: document.querySelector("#canonNodes"),
@@ -131,6 +132,7 @@ function boot() {
   renderRealismEditor();
   renderPlayerDocumentTester();
   renderInvestigationLogicAuditor();
+  switchView("investigation");
   selectAgent(game.selectedAgentId, true);
 }
 
@@ -174,6 +176,26 @@ function renderCharacterConnections(character) {
     })
     .join("");
 }
+
+function switchView(view) {
+  const activeView = view === "characters" ? "characters" : "investigation";
+  const directSections = document.querySelectorAll(".case-board > section");
+
+  directSections.forEach((section) => {
+    const isCharacters = section.classList.contains("characters-panel");
+    section.hidden = activeView === "characters" ? !isCharacters : isCharacters;
+  });
+
+  nodes.viewTabs.forEach((tab) => {
+    const isActive = tab.dataset.viewTab === activeView;
+    tab.classList.toggle("active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
+  });
+}
+
+nodes.viewTabs.forEach((tab) => {
+  tab.addEventListener("click", () => switchView(tab.dataset.viewTab));
+});
 
 function renderSuspects() {
   nodes.suspectList.replaceChildren(

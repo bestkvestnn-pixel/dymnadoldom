@@ -15,10 +15,18 @@
             <h1>Дым над льдом</h1>
           </div>
           <div class="top-actions">
-            <a class="ghost-button" href="#characters">Все персонажи</a>
             <button id="resetGame" type="button" class="ghost-button">Новая партия</button>
           </div>
         </header>
+
+        <nav class="view-tabs" aria-label="Разделы игры">
+          <button type="button" class="view-tab active" data-view-tab="investigation" aria-selected="true">
+            Расследование
+          </button>
+          <button type="button" class="view-tab" data-view-tab="characters" aria-selected="false">
+            Персонажи
+          </button>
+        </nav>
 
         <section class="case-summary">
           <div>
