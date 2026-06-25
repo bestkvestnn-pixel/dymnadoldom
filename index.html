@@ -14,7 +14,10 @@
             <p class="eyebrow">Настольная детективная игра</p>
             <h1>Дым над льдом</h1>
           </div>
-          <button id="resetGame" type="button" class="ghost-button">Новая партия</button>
+          <div class="top-actions">
+            <a class="ghost-button" href="#characters">Все персонажи</a>
+            <button id="resetGame" type="button" class="ghost-button">Новая партия</button>
+          </div>
         </header>
 
         <section class="case-summary">
@@ -26,6 +29,17 @@
             <span>Время</span>
             <strong id="caseTime"></strong>
           </div>
+        </section>
+
+        <section id="characters" class="panel characters-panel" aria-label="Все персонажи игры">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Картотека</p>
+              <h2>Все персонажи игры</h2>
+            </div>
+            <span id="characterCount"></span>
+          </div>
+          <div id="characterList" class="character-grid"></div>
         </section>
 
         <section class="workspace">

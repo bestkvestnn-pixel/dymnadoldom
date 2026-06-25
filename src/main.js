@@ -17,6 +17,8 @@ const nodes = {
   caseTime: document.querySelector("#caseTime"),
   suspectCount: document.querySelector("#suspectCount"),
   suspectList: document.querySelector("#suspectList"),
+  characterCount: document.querySelector("#characterCount"),
+  characterList: document.querySelector("#characterList"),
   evidenceCount: document.querySelector("#evidenceCount"),
   evidenceList: document.querySelector("#evidenceList"),
   agentProfile: document.querySelector("#agentProfile"),
@@ -113,8 +115,10 @@ function boot() {
   nodes.caseIntro.textContent = caseFile.intro;
   nodes.caseTime.textContent = caseFile.time;
   nodes.suspectCount.textContent = `${caseFile.agents.length} агентов`;
+  nodes.characterCount.textContent = `${canon.characters.length} персонажей`;
   nodes.evidenceCount.textContent = `${caseFile.evidence.length} улик`;
 
+  renderCharacters();
   renderSuspects();
   renderEvidence();
   renderAccuseOptions();
@@ -128,6 +132,47 @@ function boot() {
   renderPlayerDocumentTester();
   renderInvestigationLogicAuditor();
   selectAgent(game.selectedAgentId, true);
+}
+
+function renderCharacters() {
+  nodes.characterList.replaceChildren(
+    ...canon.characters.map((character) => {
+      const article = document.createElement("article");
+      article.className = "character-card";
+      article.innerHTML = `
+        <img src="${character.portrait}" alt="${character.fullName}" />
+        <div class="character-content">
+          <div>
+            <p class="eyebrow">${character.status}</p>
+            <h3>${character.fullName}</h3>
+            <p class="character-meta">${character.age} лет · ${character.dateOfBirth}</p>
+          </div>
+          <p>${character.profession}</p>
+          <p>${character.character}</p>
+          <div class="character-facts">
+            ${character.biography.slice(0, 4).map((fact) => `<span>${fact}</span>`).join("")}
+          </div>
+          <div class="character-links">
+            ${renderCharacterConnections(character)}
+          </div>
+        </div>
+      `;
+      return article;
+    })
+  );
+}
+
+function renderCharacterConnections(character) {
+  if (!character.connections?.length) return "<span>Связи пока не закреплены</span>";
+
+  return character.connections
+    .slice(0, 5)
+    .map((connection) => {
+      const target = canon.characters.find((item) => item.id === connection.targetId);
+      const targetName = target?.fullName || connection.targetId;
+      return `<span>${connection.type}: ${targetName}</span>`;
+    })
+    .join("");
 }
 
 function renderSuspects() {
