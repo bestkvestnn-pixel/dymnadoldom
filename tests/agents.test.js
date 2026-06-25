@@ -45,6 +45,9 @@ assert.equal(machiningGostPlan.mode, "gost-document-set");
 assert.ok(machiningGostPlan.requiredSections.includes("Маршрутная карта со строками А/Б/О/Т/Р"));
 
 const sergey = caseFile.agents.find((agent) => agent.id === "sergey");
+assert.equal(caseFile.agents.find((agent) => agent.id === "viktor").portrait, "./public/assets/viktor-ivanov.png");
+assert.equal(caseFile.agents.find((agent) => agent.id === "pavel").portrait, "./public/assets/pavel-levin.jpg");
+assert.equal(caseFile.agents.find((agent) => agent.id === "kristina").portrait, "./public/assets/kristina-fomina.png");
 const runtime = createAgentRuntime(sergey, caseFile);
 
 const calmAnswer = runtime.answer("Где вы были?");
@@ -56,13 +59,21 @@ assert.ok(pressuredAnswer.stress > calmAnswer.stress);
 assert.ok(pressuredAnswer.suspicion > calmAnswer.suspicion);
 
 const keeper = createCanonKeeper(canon);
+assert.ok(canon.constitution.coreIdea.includes("ложных связей"));
+assert.equal(canon.constitution.truthLevels.length, 3);
+assert.ok(canon.constitution.materialGate.some((rule) => rule.includes("абсолютное алиби")));
+assert.ok(canon.characters.every((character) => Number.isInteger(character.age)));
+assert.ok(canon.characters.every((character) => /^\d{2}\.\d{2}\.\d{4}$/.test(character.dateOfBirth)));
+assert.ok(canon.characters.every((character) => character.fullName.trim().split(/\s+/).length >= 3));
+assert.ok(canon.characters.every((character) => character.portrait?.startsWith("./public/assets/")));
 const audit = keeper.audit();
 assert.ok(Array.isArray(audit.critical));
-assert.ok(audit.potential.some((item) => item.title.includes("Возраст")));
+assert.ok(!audit.potential.some((item) => item.title.includes("Возраст")));
 
 const board = keeper.buildBoard();
 assert.ok(board.nodes.some((node) => node.label === "Сергей Павлович Акунин"));
 assert.ok(board.nodes.some((node) => node.label === "Иванов Виктор Иванович"));
+assert.equal(board.nodes.find((node) => node.id === "viktor").portrait, "./public/assets/viktor-ivanov.png");
 assert.ok(board.theories.some((theory) => theory.id === "viktor-serial-killer"));
 assert.ok(board.redHerrings.some((trail) => trail.id === "krylov-series"));
 
@@ -72,10 +83,12 @@ assert.ok(sergeyAnswer.some((line) => line.includes("burned-shirt")));
 const writer = createScenarioWriter(canon);
 const foundation = writer.buildCaseFoundation();
 assert.equal(foundation.crime.culprit, "Иванов Виктор Иванович.");
+assert.ok(foundation.hiddenTimeline.some((item) => item.truth.includes("рассказ Натальи")));
 
 const chapters = writer.buildChapterPlan();
 assert.equal(chapters.length, 3);
 assert.ok(chapters[0].newVersions.includes("Сергей убил Анну"));
+assert.ok(chapters[2].newVersions.some((version) => version.includes("нового расследования")));
 
 const chain = writer.buildDeductionChain();
 assert.ok(chain.some((step) => step.conclusion.includes("серийный маркер")));
@@ -109,7 +122,9 @@ assert.ok(clueQuality.every((item) => item.status === "рабочая"));
 const documentBuilder = createDocumentPackageBuilder(canon, clueConstructor);
 const packages = documentBuilder.buildPackages();
 assert.equal(packages.length, 3);
+assert.ok(packages[0].documents.some((doc) => doc.title === "Реестр материалов, переданных стороне защиты"));
 assert.ok(packages[1].documents.some((doc) => doc.title === "Рецепт на очки Морозова"));
+assert.ok(packages[2].documents.some((doc) => doc.title === "Показания Натальи об отпуске Виктора"));
 assert.ok(packages.every((pkg) => pkg.hiddenFacts.every((fact) => fact.sources.length >= 2)));
 assert.ok(packages[2].crossLinks.some((link) => link.includes("Акт осмотра взломанной калитки")));
 
@@ -122,7 +137,8 @@ assert.ok(packageChecks.every((item) => item.status === "готов"));
 const documentGenerator = createDocumentGenerator(documentBuilder);
 const generatedPackages = documentGenerator.generateDocuments();
 assert.equal(generatedPackages.length, 3);
-assert.ok(generatedPackages[0].documents[0].body.includes("ПРОТОКОЛ ДОПРОСА"));
+const sergeyInterrogation = generatedPackages[0].documents.find((doc) => doc.title === "Протокол первого допроса Сергея Акунина");
+assert.ok(sergeyInterrogation.body.includes("ПРОТОКОЛ ДОПРОСА"));
 
 const generatedDocuments = generatedPackages.flatMap((pkg) => pkg.documents);
 const prescription = generatedDocuments.find((doc) => doc.title === "Рецепт на очки Морозова");

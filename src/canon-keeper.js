@@ -1,6 +1,8 @@
 const requiredCharacterFields = [
   "fullName",
   "age",
+  "dateOfBirth",
+  "portrait",
   "appearance",
   "profession",
   "connections",
@@ -78,7 +80,8 @@ export function buildInvestigationBoard(canon) {
       label: character.fullName,
       type: "персонаж",
       status: character.status,
-      description: character.profession
+      description: character.profession,
+      portrait: character.portrait || null
     })),
     ...canon.evidence.map((evidence) => ({
       id: evidence.id,

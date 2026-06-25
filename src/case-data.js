@@ -87,6 +87,7 @@ export const caseFile = {
       id: "viktor",
       name: "Иванов Виктор Иванович",
       role: "врач-офтальмолог ProЗрение",
+      portrait: "./public/assets/viktor-ivanov.png",
       temperament: "спокойный, медицински точный, не любит бытовые вопросы",
       motive: "Настоящий серийный убийца выбирает жертв через табачный запах и использует сигареты как маркер.",
       secret:
@@ -135,7 +136,7 @@ export const caseFile = {
       id: "pavel",
       name: "Левин Павел Евгеньевич",
       role: "преследователь Анны",
-      portrait: "./public/assets/anna-akunina.png",
+      portrait: "./public/assets/pavel-levin.jpg",
       temperament: "замкнутый, болезненно честный, путает вину и привязанность",
       motive:
         "Взломал калитку, проник внутрь и украл шарф Анны с запахом ее духов, из-за чего выглядит опаснее, чем есть в линии убийства.",
@@ -160,7 +161,7 @@ export const caseFile = {
       id: "kristina",
       name: "Фомина Кристина Петровна",
       role: "бывшая секретарь Анны; после ее смерти сотрудница ProЗрение, 25 лет",
-      portrait: "./public/assets/veronika-pronina.png",
+      portrait: "./public/assets/kristina-fomina.png",
       temperament: "активная, фантазирующая, легко становится подозрительной",
       motive:
         "Сначала имела доступ к документам Анны, затем перешла в ProЗрение; это делает ее опасной ложной связкой между Анной и клиникой.",

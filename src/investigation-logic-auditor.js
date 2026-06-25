@@ -170,14 +170,14 @@ export function auditFinalAccusation(canon, scenarioWriter, playerDocumentTester
   const accusationStrength = scoreFinalAccusation(revealability);
 
   return {
-    accusation: `${viktor.fullName} виновен в убийстве Анны Акуниной.`,
+    accusation: `${viktor.fullName} является наиболее сильной версией по убийству Анны Акуниной и требует нового официального расследования.`,
     evidence: [
       "рецепт связывает Морозова с Ивановым",
       "CRM связывает ProЗрение с Морозовым и Анной",
       "акт осмотра калитки показывает путь входа, созданный Павлом",
       "нож с террасы закрепляет способ убийства Анны",
       "уголок рыбного корма, реклама и фото кабинета связывают ошибку с Виктором",
-      "расписание ProЗрение разрушает рабочее алиби Виктора",
+      "расписание ProЗрение показывает окно возможности Виктора, но не его местонахождение",
       "канон фиксирует KAPNOS как серийный маркер"
     ],
     missingProof: revealability.missingInformation,
@@ -190,7 +190,7 @@ export function auditFinalAccusation(canon, scenarioWriter, playerDocumentTester
       "взломанная калитка сама по себе ведет к Павлу и требует сопоставления с ножом, кормом и расписанием"
     ],
     strength: accusationStrength,
-    status: accusationStrength >= 8 ? "обвинение устойчиво" : accusationStrength >= 5 ? "обвинение частично доказано" : "обвинение недоказано"
+    status: accusationStrength >= 8 ? "сильная версия для нового расследования" : accusationStrength >= 5 ? "версия требует дополнительной проверки" : "версия недостаточно обоснована"
   };
 }
 
@@ -209,7 +209,7 @@ export function runFinalAudit(canon, scenarioWriter, documentPackageBuilder, pla
   const seriousErrors = [
     !revealability.canExplainAllImportantClues ? "Не все ключевые улики объяснимы из доступных документов." : null,
     weakLinks.length > 0 ? `Слабые звенья цепочки: ${weakLinks.map((step) => step.fact).join("; ")}.` : null,
-    finalAccusation.strength < 8 ? "Финальное обвинение уязвимо для защиты." : null
+    finalAccusation.strength < 8 ? "Версия Виктора пока недостаточно сильна, чтобы обосновать новое расследование." : null
   ].filter(Boolean);
   const minorErrors = [
     "Некоторые временные элементы существуют как канон, но еще не имеют отдельного игрового документа.",

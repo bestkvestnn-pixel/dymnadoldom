@@ -134,6 +134,7 @@ function checkLanguage(document) {
   const hasWriterlyLanguage = writerlyWords.some((word) => lower.includes(word));
   const isInterrogation = document.title.includes("допроса");
   const isPoliceProtocol = document.type.includes("полицейский") || document.title.includes("Протокол просмотра");
+  const isProcedural = document.type.includes("процессуальный");
   const isMedical = document.type.includes("медицинский");
   const isDigital = document.type.includes("цифровой");
   const strengths = [];
@@ -146,6 +147,9 @@ function checkLanguage(document) {
   }
   if (!isInterrogation && isPoliceProtocol && /\d{2}:\d{2}:\d{2}/.test(body)) {
     strengths.push("полицейский протокол фиксирует наблюдаемые события по времени");
+  }
+  if (isProcedural && body.includes("Том;") && body.includes("Листы дела") && body.includes("Подпись")) {
+    strengths.push("процессуальная опись содержит реквизиты томов, листов дела и получения");
   }
   if (isMedical && /OD:|OS:|sph|cyl/.test(body)) {
     strengths.push("врач использует профессиональные параметры обследования");
