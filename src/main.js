@@ -252,6 +252,41 @@ function getAgent(agentId) {
   return caseFile.agents.find((agent) => agent.id === agentId);
 }
 
+function normalizePersonName(name) {
+  return String(name || "")
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/[^а-яa-z0-9]+/g, " ")
+    .trim();
+}
+
+function findPersonByName(name) {
+  const normalized = normalizePersonName(name);
+  if (!normalized) return null;
+
+  const people = [
+    ...caseFile.agents.map((agent) => ({ name: agent.name, portrait: agent.portrait })),
+    ...canon.characters.map((character) => ({ name: character.fullName, portrait: character.portrait }))
+  ];
+
+  return people.find((person) => {
+    const personName = normalizePersonName(person.name);
+    return personName === normalized || personName.includes(normalized) || normalized.includes(personName);
+  });
+}
+
+function personCell(name) {
+  const person = findPersonByName(name);
+  if (!person?.portrait) return name;
+
+  return `
+    <span class="person-cell">
+      <img src="${person.portrait}" alt="${name}" />
+      <span>${name}</span>
+    </span>
+  `;
+}
+
 nodes.questionForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const question = nodes.questionInput.value.trim();
@@ -512,7 +547,7 @@ function renderClueConstructor() {
       "Матрица подозреваемых",
       suspectMatrix.map(
         (suspect) =>
-          `${suspect.name}: против — ${suspect.against.join(", ")}; в пользу — ${suspect.inFavor.join(", ")}; ложное подозрение — ${suspect.falseSuspicion}`
+          `${personCell(suspect.name)} против — ${suspect.against.join(", ")}; в пользу — ${suspect.inFavor.join(", ")}; ложное подозрение — ${suspect.falseSuspicion}`
       )
     ),
     card(
@@ -724,7 +759,7 @@ function renderPlayerDocumentTester() {
       chapterTests.flatMap((chapter) =>
         chapter.suspects.slice(0, 4).map((suspect) => [
           chapter.chapterTitle,
-          suspect.name,
+          personCell(suspect.name),
           suspect.score,
           suspect.reason
         ])
@@ -794,7 +829,7 @@ function renderInvestigationLogicAuditor() {
     table(
       ["Подозреваемый", "Можно исключить", "Можно обвинить", "Статус"],
       suspects.map((suspect) => [
-        suspect.suspect,
+        personCell(suspect.suspect),
         suspect.canExclude ? "да" : "нет",
         suspect.canAccuse ? "да" : "нет",
         suspect.status

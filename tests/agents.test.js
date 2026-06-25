@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import { caseFile } from "../src/case-data.js";
 import { createAgentRuntime, detectIntent } from "../src/agent-engine.js";
 import { canon } from "../src/canon-data.js";
@@ -45,6 +47,12 @@ assert.equal(machiningGostPlan.mode, "gost-document-set");
 assert.ok(machiningGostPlan.requiredSections.includes("Маршрутная карта со строками А/Б/О/Т/Р"));
 
 const sergey = caseFile.agents.find((agent) => agent.id === "sergey");
+assert.ok(caseFile.agents.every((agent) => agent.portrait?.startsWith("./public/assets/")));
+assert.ok(
+  caseFile.agents.every((agent) =>
+    fs.existsSync(path.join(process.cwd(), agent.portrait.replace(/^\.\//, "")))
+  )
+);
 assert.equal(caseFile.agents.find((agent) => agent.id === "viktor").portrait, "./public/assets/viktor-ivanov.png");
 assert.equal(caseFile.agents.find((agent) => agent.id === "pavel").portrait, "./public/assets/pavel-levin.jpg");
 assert.equal(caseFile.agents.find((agent) => agent.id === "kristina").portrait, "./public/assets/kristina-fomina.png");
