@@ -19,6 +19,12 @@ const nodes = {
   suspectList: document.querySelector("#suspectList"),
   characterCount: document.querySelector("#characterCount"),
   characterList: document.querySelector("#characterList"),
+  accessCount: document.querySelector("#accessCount"),
+  accessPrinciple: document.querySelector("#accessPrinciple"),
+  accessLevels: document.querySelector("#accessLevels"),
+  accessChapters: document.querySelector("#accessChapters"),
+  accessKeys: document.querySelector("#accessKeys"),
+  accessDeadlocks: document.querySelector("#accessDeadlocks"),
   evidenceCount: document.querySelector("#evidenceCount"),
   evidenceList: document.querySelector("#evidenceList"),
   agentProfile: document.querySelector("#agentProfile"),
@@ -117,9 +123,12 @@ function boot() {
   nodes.caseTime.textContent = caseFile.time;
   nodes.suspectCount.textContent = `${caseFile.agents.length} агентов`;
   nodes.characterCount.textContent = `${canon.characters.length} персонажей`;
+  nodes.accessCount.textContent = `${canon.accessMap.keyTable.length} материалов`;
+  nodes.accessPrinciple.textContent = `${canon.accessMap.principle} ${canon.accessMap.canonAdaptation}`;
   nodes.evidenceCount.textContent = `${caseFile.evidence.length} улик`;
 
   renderCharacters();
+  renderAccessMap();
   renderSuspects();
   renderEvidence();
   renderAccuseOptions();
@@ -134,6 +143,37 @@ function boot() {
   renderInvestigationLogicAuditor();
   switchView("investigation");
   selectAgent(game.selectedAgentId, true);
+}
+
+function renderAccessMap() {
+  nodes.accessLevels.replaceChildren(
+    ...canon.accessMap.levels.map((level) =>
+      card(`Уровень ${level.level}. ${level.title}`, [level.rule])
+    )
+  );
+
+  nodes.accessChapters.replaceChildren(
+    ...canon.accessMap.chapters.map((chapter) =>
+      card(chapter.title, [
+        `Цель: ${chapter.goal}`,
+        `Старт: ${chapter.startMaterials.map((item) => `${item.code} ${item.title}`).join("; ")}`,
+        `Ветки: ${chapter.branches.map((branch) => `${branch.code} ${branch.title}`).join("; ")}`,
+        `Финал: ${chapter.finale.code} — ${chapter.finale.effect}`
+      ])
+    ),
+    card("Итоговое движение", canon.accessMap.movement)
+  );
+
+  nodes.accessKeys.replaceChildren(
+    table(
+      ["Код", "Материал", "Открывается после"],
+      canon.accessMap.keyTable.map((item) => [item.code, item.material, item.opensAfter])
+    )
+  );
+
+  nodes.accessDeadlocks.replaceChildren(
+    ...canon.accessMap.deadlockProtection.map((rule, index) => card(`Страховка ${index + 1}`, [rule]))
+  );
 }
 
 function renderCharacters() {
@@ -178,12 +218,22 @@ function renderCharacterConnections(character) {
 }
 
 function switchView(view) {
-  const activeView = view === "characters" ? "characters" : "investigation";
+  const allowedViews = ["investigation", "characters", "access"];
+  const activeView = allowedViews.includes(view) ? view : "investigation";
   const directSections = document.querySelectorAll(".case-board > section");
 
   directSections.forEach((section) => {
     const isCharacters = section.classList.contains("characters-panel");
-    section.hidden = activeView === "characters" ? !isCharacters : isCharacters;
+    const isAccess = section.classList.contains("access-panel");
+    if (activeView === "characters") {
+      section.hidden = !isCharacters;
+      return;
+    }
+    if (activeView === "access") {
+      section.hidden = !isAccess;
+      return;
+    }
+    section.hidden = isCharacters || isAccess;
   });
 
   nodes.viewTabs.forEach((tab) => {

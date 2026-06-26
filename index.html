@@ -26,6 +26,9 @@
           <button type="button" class="view-tab" data-view-tab="characters" aria-selected="false">
             Персонажи
           </button>
+          <button type="button" class="view-tab" data-view-tab="access" aria-selected="false">
+            Доступ к материалам
+          </button>
         </nav>
 
         <section class="case-summary">
@@ -48,6 +51,35 @@
             <span id="characterCount"></span>
           </div>
           <div id="characterList" class="character-grid"></div>
+        </section>
+
+        <section id="access" class="panel access-panel" aria-label="Карта доступа к материалам">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Карта доступа</p>
+              <h2>Доступ к материалам</h2>
+            </div>
+            <span id="accessCount"></span>
+          </div>
+          <p id="accessPrinciple" class="access-principle"></p>
+          <div class="access-grid">
+            <article>
+              <h3>Уровни доступа</h3>
+              <div id="accessLevels" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Главы и ветки</h3>
+              <div id="accessChapters" class="canon-list"></div>
+            </article>
+            <article>
+              <h3>Таблица ключей</h3>
+              <div id="accessKeys" class="canon-table"></div>
+            </article>
+            <article>
+              <h3>Защита от тупиков</h3>
+              <div id="accessDeadlocks" class="canon-list"></div>
+            </article>
+          </div>
         </section>
 
         <section class="workspace">
