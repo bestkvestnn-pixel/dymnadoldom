@@ -1,8 +1,6 @@
 const requiredCharacterFields = [
   "fullName",
-  "age",
   "dateOfBirth",
-  "portrait",
   "appearance",
   "profession",
   "connections",
@@ -38,7 +36,7 @@ export function auditCanon(canon) {
       }
     }
 
-    if (character.age === null) {
+    if (character.age === null && !character.ageNote) {
       issues.potential.push(issue("Возраст требует уточнения", character.fullName, "Проверка биографии и возраста пока невозможна."));
     }
   }

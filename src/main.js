@@ -183,13 +183,19 @@ function renderCharacters() {
     ...canon.characters.map((character) => {
       const article = document.createElement("article");
       article.className = "character-card";
+      const ageLabel = Number.isInteger(character.age)
+        ? `${character.age} лет`
+        : character.ageNote || "возраст не закреплен";
+      const portraitMarkup = character.portrait
+        ? `<img src="${character.portrait}" alt="${character.fullName}" />`
+        : `<div class="character-placeholder" aria-label="${character.fullName}">${initialsFor(character.fullName)}</div>`;
       article.innerHTML = `
-        <img src="${character.portrait}" alt="${character.fullName}" />
+        ${portraitMarkup}
         <div class="character-content">
           <div>
             <p class="eyebrow">${character.status}</p>
             <h3>${character.fullName}</h3>
-            <p class="character-meta">${character.age} лет · ${character.dateOfBirth}</p>
+            <p class="character-meta">${ageLabel} · ${character.dateOfBirth}</p>
           </div>
           <p>${character.profession}</p>
           <p>${character.character}</p>
@@ -231,6 +237,16 @@ function renderCharacters() {
       ])
     )
   );
+}
+
+function initialsFor(fullName) {
+  return fullName
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
 }
 
 function renderCharacterConnections(character) {
