@@ -255,11 +255,11 @@ function rankSuspects(clues, notes, memory) {
   const bump = (name, value) => scores.set(name, Math.min(10, (scores.get(name) || 2) + value));
 
   clues.forEach((clue) => {
-    if (clue.text.includes("Сергей") || clue.text.includes("Вероник")) bump("Сергей Павлович Акунин", 2);
+    if (clue.text.includes("Сергей") || clue.text.includes("Вероник")) bump("Сергей Андреевич Акунин", 2);
     if (clue.text.includes("Т.") || clue.text.includes("фото")) bump("Тихонов / отправитель фото", 2);
-    if (clue.text.includes("Иванов")) bump("Иванов Виктор Иванович", 3);
-    if (clue.text.includes("Мия") || clue.text.includes("выставка") || clue.text.includes("сигарета у Мии")) bump("Иванов Виктор Иванович", 2);
-    if (clue.text.includes("рыбный корм") || clue.text.includes("расписание ProЗрение")) bump("Иванов Виктор Иванович", 2);
+    if (clue.text.includes("Иванов")) bump("Иванов Виктор Ильич", 3);
+    if (clue.text.includes("Мия") || clue.text.includes("выставка") || clue.text.includes("сигарета у Мии")) bump("Иванов Виктор Ильич", 2);
+    if (clue.text.includes("рыбный корм") || clue.text.includes("расписание ProЗрение")) bump("Иванов Виктор Ильич", 2);
     if (clue.text.includes("Кристина")) bump("Кристина", 2);
     if (clue.text.includes("калитка")) bump("Левин Павел Евгеньевич", 2);
     if (clue.text.includes("шарф") || clue.text.includes("духов")) bump("Левин Павел Евгеньевич", 2);

@@ -292,6 +292,44 @@ h1 {
   color: var(--muted);
 }
 
+.personnel-section {
+  margin-top: 18px;
+}
+
+.personnel-section h3 {
+  margin-bottom: 10px;
+  color: var(--accent-strong);
+}
+
+.personnel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.personnel-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #181b20;
+  padding: 12px;
+}
+
+.personnel-card h3 {
+  margin-bottom: 8px;
+  font-size: 17px;
+}
+
+.personnel-card p {
+  margin-bottom: 7px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.personnel-card p:last-child {
+  margin-bottom: 0;
+}
+
 .panel {
   min-height: 240px;
   border: 1px solid var(--line);
@@ -728,6 +766,10 @@ progress {
   }
 
   .character-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .personnel-grid {
     grid-template-columns: 1fr;
   }
 

@@ -144,7 +144,7 @@ export function attackInvestigation(playerDocumentTester) {
   const chapters = playerDocumentTester.testChapters();
   const revealability = playerDocumentTester.testRevealability();
   const finalSuspects = chapters.at(-1).suspects;
-  const bestAlternative = finalSuspects.find((suspect) => suspect.name !== "Иванов Виктор Иванович");
+  const bestAlternative = finalSuspects.find((suspect) => suspect.name !== "Иванов Виктор Ильич");
 
   return {
     alternativeCulprit: bestAlternative?.name || "Левин Павел Евгеньевич",

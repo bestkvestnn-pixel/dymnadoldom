@@ -19,6 +19,8 @@ const nodes = {
   suspectList: document.querySelector("#suspectList"),
   characterCount: document.querySelector("#characterCount"),
   characterList: document.querySelector("#characterList"),
+  personnelList: document.querySelector("#personnelList"),
+  forensicTable: document.querySelector("#forensicTable"),
   accessCount: document.querySelector("#accessCount"),
   accessPrinciple: document.querySelector("#accessPrinciple"),
   accessLevels: document.querySelector("#accessLevels"),
@@ -122,7 +124,7 @@ function boot() {
   nodes.caseIntro.textContent = caseFile.intro;
   nodes.caseTime.textContent = caseFile.time;
   nodes.suspectCount.textContent = `${caseFile.agents.length} агентов`;
-  nodes.characterCount.textContent = `${canon.characters.length} персонажей`;
+  nodes.characterCount.textContent = `${canon.characters.length + canon.investigationPersonnel.length} персонажей`;
   nodes.accessCount.textContent = `${canon.accessMap.keyTable.length} материалов`;
   nodes.accessPrinciple.textContent = `${canon.accessMap.principle} ${canon.accessMap.canonAdaptation}`;
   nodes.evidenceCount.textContent = `${caseFile.evidence.length} улик`;
@@ -201,6 +203,33 @@ function renderCharacters() {
       `;
       return article;
     })
+  );
+
+  nodes.personnelList.replaceChildren(
+    ...canon.investigationPersonnel.map((person) => {
+      const article = document.createElement("article");
+      article.className = "personnel-card";
+      article.innerHTML = `
+        <p class="eyebrow">${person.role}</p>
+        <h3>${person.fullName}</h3>
+        <p><strong>Дело:</strong> ${person.relatedCase}</p>
+        <p>${person.function}</p>
+      `;
+      return article;
+    })
+  );
+
+  nodes.forensicTable.replaceChildren(
+    table(
+      ["Погибший", "Дата смерти", "Обнаружение", "Эксперт", "Подразделение"],
+      canon.forensicCases.map((item) => [
+        item.victim,
+        item.deathDate,
+        item.discoveryDate,
+        item.expert,
+        item.department
+      ])
+    )
   );
 }
 
