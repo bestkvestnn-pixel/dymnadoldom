@@ -56,6 +56,7 @@ assert.ok(
 assert.equal(caseFile.agents.find((agent) => agent.id === "viktor").portrait, "./public/assets/viktor-ivanov.png");
 assert.equal(caseFile.agents.find((agent) => agent.id === "pavel").portrait, "./public/assets/pavel-levin.jpg");
 assert.equal(caseFile.agents.find((agent) => agent.id === "kristina").portrait, "./public/assets/kristina-fomina.png");
+assert.equal(caseFile.agents.find((agent) => agent.id === "tikhonov").name, "Тихонов Евгений Аркадьевич");
 const runtime = createAgentRuntime(sergey, caseFile);
 
 const calmAnswer = runtime.answer("Где вы были?");
@@ -85,6 +86,7 @@ assert.ok(canon.characters.some((character) => character.fullName === "Иван�
 assert.ok(canon.characters.some((character) => character.fullName === "Кристина Денисовна Орлова"));
 assert.ok(canon.characters.some((character) => character.fullName === "Соколов Олег Петрович"));
 assert.ok(canon.characters.some((character) => character.fullName === "Инна Валерьевна Белова"));
+assert.ok(canon.characters.some((character) => character.fullName === "Тихонов Евгений Аркадьевич"));
 assert.ok(canon.characters.some((character) => character.fullName === "Дмитрий Павлович Назаров"));
 assert.ok(canon.characters.some((character) => character.fullName === "Илья Лонцов" && character.age === null));
 assert.ok(canon.characters.some((character) => character.fullName === "Николай Иванов" && character.age === null));

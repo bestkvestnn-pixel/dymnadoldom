@@ -501,7 +501,7 @@ export const canon = {
     },
     {
       id: "tikhonov",
-      fullName: "Тихонов Вадим Аркадьевич",
+      fullName: "Тихонов Евгений Аркадьевич",
       age: 48,
       dateOfBirth: "14.10.1976",
       portrait: "./public/assets/evgeniy-tikhonov.png",

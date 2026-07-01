@@ -111,7 +111,7 @@ export const caseFile = {
     },
     {
       id: "tikhonov",
-      name: "Тихонов Вадим Аркадьевич",
+      name: "Тихонов Евгений Аркадьевич",
       role: "крупный бизнесмен, бывший наставник Анны",
       portrait: "./public/assets/evgeniy-tikhonov.png",
       temperament: "осторожный, формальный, держит дистанцию",
