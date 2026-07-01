@@ -56,7 +56,7 @@ assert.ok(
 assert.equal(caseFile.agents.find((agent) => agent.id === "viktor").portrait, "./public/assets/viktor-ivanov.png");
 assert.equal(caseFile.agents.find((agent) => agent.id === "pavel").portrait, "./public/assets/pavel-levin.jpg");
 assert.equal(caseFile.agents.find((agent) => agent.id === "kristina").portrait, "./public/assets/kristina-fomina.png");
-assert.equal(caseFile.agents.find((agent) => agent.id === "tikhonov").name, "Тихонов Евгений Аркадьевич");
+assert.equal(caseFile.agents.find((agent) => agent.id === "tikhonov").name, "Тихонов Евгений Фёдорович");
 const runtime = createAgentRuntime(sergey, caseFile);
 
 const calmAnswer = runtime.answer("Где вы были?");
@@ -81,26 +81,43 @@ assert.ok(canon.characters.every((character) => Number.isInteger(character.age) 
 assert.ok(canon.characters.every((character) => /^\d{2}\.\d{2}\.\d{4}$/.test(character.dateOfBirth) || character.dateOfBirth === "не закреплена"));
 assert.ok(canon.characters.every((character) => character.fullName.trim().split(/\s+/).length >= 2));
 assert.ok(canon.characters.every((character) => !character.portrait || character.portrait.startsWith("./public/assets/")));
-assert.ok(canon.characters.some((character) => character.fullName === "Акунина Анна Петровна" && character.dateOfBirth === "17.05.1983"));
-assert.ok(canon.characters.some((character) => character.fullName === "Иванов Виктор Ильич" && character.dateOfBirth === "08.01.1988"));
-assert.ok(canon.characters.some((character) => character.fullName === "Кристина Денисовна Орлова"));
-assert.ok(canon.characters.some((character) => character.fullName === "Соколов Олег Петрович"));
-assert.ok(canon.characters.some((character) => character.fullName === "Инна Валерьевна Белова"));
-assert.ok(canon.characters.some((character) => character.fullName === "Тихонов Евгений Аркадьевич"));
+const canonicalCharacterNames = [
+  "Акунина Анна Павловна",
+  "Сергей Павлович Акунин",
+  "Пронина Вероника Алексеевна",
+  "Иванов Виктор Иванович",
+  "Иванова Наталья Вячеславовна",
+  "Приходько Жанна Валентиновна",
+  "Тищенко Мия Андреевна",
+  "Фомина Кристина Петровна",
+  "Крестова Инна Романовна",
+  "Лихачев Антон Сергеевич",
+  "Скорый Артур Максимович",
+  "Тихонов Евгений Фёдорович",
+  "Левин Павел Евгеньевич",
+  "Егорова Мария Валентиновна",
+  "Соколов Павел Владимирович",
+  "Соколов Олег Павлович"
+];
+assert.ok(canonicalCharacterNames.every((name) => canon.characters.some((character) => character.fullName === name)));
+assert.ok(canon.characters.some((character) => character.fullName === "Акунина Анна Павловна" && character.dateOfBirth === "17.05.1983"));
+assert.ok(canon.characters.some((character) => character.fullName === "Иванов Виктор Иванович" && character.dateOfBirth === "08.01.1988"));
+assert.ok(canon.characters.some((character) => character.fullName === "Приходько Жанна Валентиновна" && character.maidenName === "Егорова"));
 assert.ok(canon.characters.some((character) => character.fullName === "Дмитрий Павлович Назаров"));
 assert.ok(canon.characters.some((character) => character.fullName === "Илья Лонцов" && character.age === null));
 assert.ok(canon.characters.some((character) => character.fullName === "Николай Иванов" && character.age === null));
 assert.ok(canon.characters.some((character) => character.fullName === "Оксана Иванова" && character.age === null));
 assert.ok(canon.investigationPersonnel.some((person) => person.fullName === "Пётр Андреевич Железнов"));
+assert.ok(canon.investigationPersonnel.some((person) => person.fullName === "Михаил Олегович Воронцов"));
 assert.ok(canon.forensicCases.some((item) => item.victim === "Алексей Сергеевич Морозов" && item.deathDate === "13.04.2025"));
-assert.ok(canon.forensicCases.some((item) => item.victim === "Анна Петровна Акунина" && item.deathDate === "03.09.2025"));
+assert.ok(canon.forensicCases.some((item) => item.victim === "Анна Павловна Акунина" && item.deathDate === "03.09.2025"));
 const audit = keeper.audit();
 assert.ok(Array.isArray(audit.critical));
 assert.ok(!audit.potential.some((item) => item.title.includes("Возраст")));
 
 const board = keeper.buildBoard();
-assert.ok(board.nodes.some((node) => node.label === "Сергей Андреевич Акунин"));
-assert.ok(board.nodes.some((node) => node.label === "Иванов Виктор Ильич"));
+assert.ok(board.nodes.some((node) => node.label === "Сергей Павлович Акунин"));
+assert.ok(board.nodes.some((node) => node.label === "Иванов Виктор Иванович"));
 assert.equal(board.nodes.find((node) => node.id === "viktor").portrait, "./public/assets/viktor-ivanov.png");
 assert.ok(board.theories.some((theory) => theory.id === "viktor-serial-killer"));
 assert.ok(board.redHerrings.some((trail) => trail.id === "krylov-series"));
@@ -110,7 +127,7 @@ assert.ok(sergeyAnswer.some((line) => line.includes("burned-shirt")));
 
 const writer = createScenarioWriter(canon);
 const foundation = writer.buildCaseFoundation();
-assert.equal(foundation.crime.culprit, "Иванов Виктор Ильич.");
+assert.equal(foundation.crime.culprit, "Иванов Виктор Иванович.");
 assert.ok(foundation.hiddenTimeline.some((item) => item.truth.includes("рассказ Натальи")));
 
 const chapters = writer.buildChapterPlan();
@@ -201,7 +218,7 @@ assert.ok(playerDocumentNotes.some((note) => note.document === "Рецепт н�
 const playerChapters = playerTester.testChapters();
 assert.equal(playerChapters.length, 3);
 assert.ok(playerChapters[0].versions.main.includes("Сергей"));
-assert.ok(playerChapters[1].suspects.some((suspect) => suspect.name === "Иванов Виктор Ильич"));
+assert.ok(playerChapters[1].suspects.some((suspect) => suspect.name === "Иванов Виктор Иванович"));
 assert.ok(playerChapters[2].stuckPoints.some((point) => point.includes("недостающего документа")));
 
 const revealability = playerTester.testRevealability();
@@ -219,7 +236,7 @@ const proofChainAudit = logicAuditor.auditProofChain();
 assert.ok(proofChainAudit.some((step) => step.status === "слабое звено"));
 
 const suspectAudit = logicAuditor.auditSuspects();
-assert.ok(suspectAudit.some((suspect) => suspect.suspect === "Иванов Виктор Ильич" && suspect.status === "не хватает элемента обвинения"));
+assert.ok(suspectAudit.some((suspect) => suspect.suspect === "Иванов Виктор Иванович" && suspect.status === "не хватает элемента обвинения"));
 
 const finalAccusation = logicAuditor.auditFinalAccusation();
 assert.ok(finalAccusation.strength < 8);
